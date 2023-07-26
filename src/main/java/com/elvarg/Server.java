@@ -28,7 +28,7 @@ public class Server {
     /**
      * The logger that will print important information.
      */
-    private static Logger logger = Logger.getLogger(Server.class.getSimpleName());
+    private static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     /**
      * The flag that determines if the server is currently being updated or not.
      */

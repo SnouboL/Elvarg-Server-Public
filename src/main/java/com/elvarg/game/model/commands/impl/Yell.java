@@ -33,15 +33,14 @@ public class Yell implements Command {
 					"You must wait another " + player.getYellDelay().secondsRemaining() + " seconds to do that.");
 			return;
 		}
-		String yellMessage = command.substring(4, command.length());
+		String yellMessage = command.substring(4);
 		if (Misc.blockedWord(yellMessage)) {
-		//	DialogueManager.sendStatement(player, "A word was blocked in your sentence. Please do not repeat it!");
-			return;
+			player.getPacketSender().sendMessage("A word was blocked in your sentence. Please do not repeat it!");
 		}
 
 		int spriteId = player.getRights().getSpriteId();
 		String sprite = (spriteId == -1 ? "" : "<img=" + spriteId + ">");
-		String yell = ("" + getYellPrefix(player) + sprite + " " + player.getUsername() + ":" + yellMessage);
+		String yell = (getYellPrefix(player) + sprite + " " + player.getUsername() + ":" + yellMessage);
 		World.getPlayers().forEach(e -> e.getPacketSender().sendSpecialMessage(player.getUsername(), 21, yell));
 
 		int yellDelay = getYellDelay(player);
@@ -52,9 +51,6 @@ public class Yell implements Command {
 
 	@Override
 	public boolean canUse(Player player) {
-		if (player.isStaff() || player.isDonator()) {
-			return true;
-		}
-		return false;
+		return player.isStaff() || player.isDonator();
 	}
 }

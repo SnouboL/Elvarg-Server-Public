@@ -6,7 +6,13 @@ import com.elvarg.util.Misc;
 
 public class StatementDialogue extends Dialogue {
 
-    private static final int[] CHATBOX_INTERFACES = { 356, 359, 363, 368, 374 };
+    private static final int ONE_LINES = 356;
+    private static final int TWO_LINES = 359;
+    private static final int THREE_LINES = 363;
+    private static final int FOUR_LINES = 368;
+    private static final int FIVE_LINES = 374;
+
+    private static final int[] CHATBOX_INTERFACES = { ONE_LINES, TWO_LINES, THREE_LINES, FOUR_LINES, FIVE_LINES };
 
     private final String text;
 
@@ -22,7 +28,7 @@ public class StatementDialogue extends Dialogue {
     
     public static void send(Player player, String text) {
         String[] lines = Misc.wrapText(text, 60);
-        int length = lines.length > 5 ? 5 : lines.length;
+        int length = Math.min(lines.length, 5);
         int chatboxInterface = CHATBOX_INTERFACES[length - 1];
         for (int i = 0; i < length; i++) {
             player.getPacketSender().sendString((chatboxInterface + 1) + i, lines[i]);

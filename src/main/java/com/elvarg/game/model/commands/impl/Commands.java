@@ -3,12 +3,14 @@ package com.elvarg.game.model.commands.impl;
 import com.elvarg.game.entity.impl.player.Player;
 import com.elvarg.game.model.commands.Command;
 
-public class Store implements Command {
+public class Commands implements Command {
 
     @Override
     public void execute(Player player, String command, String[] parts) {
-//        player.getPacketSender().sendURL("http://www.deadlypkers.net");
-        player.getPacketSender().sendMessage("Store for an Offline only server? lol.");
+        player.getPacketSender().sendMessage("commands," +
+                " passwd," +
+                " lockxp," +
+                " kdr, players");
     }
 
     @Override

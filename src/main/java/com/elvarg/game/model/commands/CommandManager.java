@@ -1,72 +1,10 @@
 package com.elvarg.game.model.commands;
 
+import com.elvarg.Server;
+import com.elvarg.game.model.commands.impl.*;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.elvarg.Server;
-import com.elvarg.game.model.commands.impl.AnimationCommand;
-import com.elvarg.game.model.commands.impl.AreaDebug;
-import com.elvarg.game.model.commands.impl.BanPlayer;
-import com.elvarg.game.model.commands.impl.Bank;
-import com.elvarg.game.model.commands.impl.BarrageCommand;
-import com.elvarg.game.model.commands.impl.ChangePassword;
-import com.elvarg.game.model.commands.impl.ChatboxInterfaceCommand;
-import com.elvarg.game.model.commands.impl.Claim;
-import com.elvarg.game.model.commands.impl.ConfigCommand;
-import com.elvarg.game.model.commands.impl.CopyBank;
-import com.elvarg.game.model.commands.impl.CreationDate;
-import com.elvarg.game.model.commands.impl.DebugCommand;
-import com.elvarg.game.model.commands.impl.DialogueCommand;
-import com.elvarg.game.model.commands.impl.Down;
-import com.elvarg.game.model.commands.impl.Empty;
-import com.elvarg.game.model.commands.impl.ExitClient;
-import com.elvarg.game.model.commands.impl.FloodCommand;
-import com.elvarg.game.model.commands.impl.GFXCommand;
-import com.elvarg.game.model.commands.impl.InfiniteHealth;
-import com.elvarg.game.model.commands.impl.InterfaceCommand;
-import com.elvarg.game.model.commands.impl.IpBanPlayer;
-import com.elvarg.game.model.commands.impl.IpMutePlayer;
-import com.elvarg.game.model.commands.impl.ItemSpawn;
-import com.elvarg.game.model.commands.impl.Kdr;
-import com.elvarg.game.model.commands.impl.KickPlayer;
-import com.elvarg.game.model.commands.impl.ListSizesCommand;
-import com.elvarg.game.model.commands.impl.LockExperience;
-import com.elvarg.game.model.commands.impl.MasterCommand;
-import com.elvarg.game.model.commands.impl.MutePlayer;
-import com.elvarg.game.model.commands.impl.Noclip;
-import com.elvarg.game.model.commands.impl.OpenThread;
-import com.elvarg.game.model.commands.impl.PNPCCommand;
-import com.elvarg.game.model.commands.impl.Players;
-import com.elvarg.game.model.commands.impl.PositionDebug;
-import com.elvarg.game.model.commands.impl.ReloadCommands;
-import com.elvarg.game.model.commands.impl.ReloadDrops;
-import com.elvarg.game.model.commands.impl.ReloadItems;
-import com.elvarg.game.model.commands.impl.ReloadNPCDefinitions;
-import com.elvarg.game.model.commands.impl.ReloadNPCSpawns;
-import com.elvarg.game.model.commands.impl.ReloadPunishments;
-import com.elvarg.game.model.commands.impl.ReloadShops;
-import com.elvarg.game.model.commands.impl.ResetCommand;
-import com.elvarg.game.model.commands.impl.Runes;
-import com.elvarg.game.model.commands.impl.Save;
-import com.elvarg.game.model.commands.impl.SaveAll;
-import com.elvarg.game.model.commands.impl.Skull;
-import com.elvarg.game.model.commands.impl.SpawnNPCCommand;
-import com.elvarg.game.model.commands.impl.SpawnObjectCommand;
-import com.elvarg.game.model.commands.impl.SpecCommand;
-import com.elvarg.game.model.commands.impl.Store;
-import com.elvarg.game.model.commands.impl.TaskDebug;
-import com.elvarg.game.model.commands.impl.TeleTo;
-import com.elvarg.game.model.commands.impl.TeleToMe;
-import com.elvarg.game.model.commands.impl.TeleToPlayer;
-import com.elvarg.game.model.commands.impl.TimePlayed;
-import com.elvarg.game.model.commands.impl.Title;
-import com.elvarg.game.model.commands.impl.UnBanPlayer;
-import com.elvarg.game.model.commands.impl.UnIpMutePlayer;
-import com.elvarg.game.model.commands.impl.UnMutePlayer;
-import com.elvarg.game.model.commands.impl.UnlockPrayers;
-import com.elvarg.game.model.commands.impl.Up;
-import com.elvarg.game.model.commands.impl.UpdateServer;
-import com.elvarg.game.model.commands.impl.Yell;
 
 public class CommandManager {
 
@@ -80,28 +18,29 @@ public class CommandManager {
     
     public static void loadCommands() {
         commands.clear();
-        
-        /**
-         * Players Command
+
+        /*
+          Players Command
          */
-        put(new ChangePassword(), "changepassword");
-        put(new LockExperience(), "lockxp");
+        put(new Commands(), "commands", "cmd");
+        put(new ChangePassword(), "passwd");
+        put(new LockExperience(), "lockxp", "xplock");
         put(new Claim(), "claim");
-        put(new CreationDate(), "creationdate");
+        put(new CreationDate(), "creationdate", "cdate");
         put(new Kdr(), "kdr");
         put(new Players(), "players");
         put(new OpenThread(), "thread");
-        put(new TimePlayed(), "timeplayed");
+        put(new TimePlayed(), "timeplayed", "played");
         put(new Store(), "store", "donate");
 
-        /**
-         * Donators Command
+        /*
+          Donators Command
          */
         put(new Yell(), "yell");
         put(new Skull(), "skull", "redskull");
 
-        /**
-         * Moderators Commands
+        /*
+          Moderators Commands
          */
         put(new MutePlayer(), "mute");
         put(new UnMutePlayer(), "unmute");
@@ -114,8 +53,8 @@ public class CommandManager {
         put(new ExitClient(), "exit");
         put(new KickPlayer(), "kick");
 
-        /**
-         * Administrator Commands
+        /*
+          Administrator Commands
          */
         put(new ReloadItems(), "reloaditemdefs");
         put(new ReloadNPCDefinitions(), "reloadnpcdefs");
@@ -131,17 +70,18 @@ public class CommandManager {
         put(new UnlockPrayers(), "unlockprayers");
         put(new SaveAll(), "saveall");
 
-        /**
-         * Owner Commands
+        /*
+          Owner Commands
          */
         put(new CopyBank(), "copybank");
         put(new Bank(), "bank");
         put(new Title(), "title");
         put(new Runes(), "runes");
         put(new BarrageCommand(), "barrage");
+        put(new Developer(), "dev");
 
-        /**
-         * Developer Commands
+        /*
+          Developer Commands
          */
         put(new DialogueCommand(), "dialogue");
         put(new FloodCommand(), "flood");

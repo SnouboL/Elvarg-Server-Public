@@ -3,7 +3,6 @@ package com.elvarg.net.packet.impl;
 import com.elvarg.Server;
 import com.elvarg.game.collision.RegionManager;
 import com.elvarg.game.content.minigames.FightCaves;
-import com.elvarg.game.content.skill.skillable.impl.Smithing;
 import com.elvarg.game.content.skill.skillable.impl.Smithing.Bar;
 import com.elvarg.game.content.skill.skillable.impl.Smithing.EquipmentMaking;
 import com.elvarg.game.content.skill.skillable.impl.Thieving.StallThieving;
@@ -11,12 +10,7 @@ import com.elvarg.game.definition.ObjectDefinition;
 import com.elvarg.game.entity.impl.object.GameObject;
 import com.elvarg.game.entity.impl.object.MapObjects;
 import com.elvarg.game.entity.impl.player.Player;
-import com.elvarg.game.model.Animation;
-import com.elvarg.game.model.ForceMovement;
-import com.elvarg.game.model.Graphic;
-import com.elvarg.game.model.Location;
-import com.elvarg.game.model.MagicSpellbook;
-import com.elvarg.game.model.Skill;
+import com.elvarg.game.model.*;
 import com.elvarg.game.model.areas.impl.PrivateArea;
 import com.elvarg.game.model.movement.WalkToAction;
 import com.elvarg.game.model.rights.PlayerRights;
@@ -165,11 +159,12 @@ public class ObjectActionPacketListener extends ObjectIdentifiers implements Pac
             //DialogueManager.sendStatement(player, "Construction will be avaliable in the future.");
             break;
         case FURNACE_18:
-            for (Bar bar : Smithing.Bar.values()) {
+            for (Bar bar : Bar.values()) {
                 player.getPacketSender().sendInterfaceModel(bar.getFrame(), bar.getBar(), 150);
             }
             player.getPacketSender().sendChatboxInterface(2400);
             break;
+        case BANK_DEPOSIT_BOX_10:
         case BANK_CHEST:
         case BANK:
         case BANK_BOOTH:
@@ -182,6 +177,8 @@ public class ObjectActionPacketListener extends ObjectIdentifiers implements Pac
             player.getPacketSender().sendInterfaceRemoval();
             MagicSpellbook.changeSpellbook(player, MagicSpellbook.NORMAL);
             break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + object.getId());
         }
 	}
 

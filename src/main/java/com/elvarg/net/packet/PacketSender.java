@@ -146,6 +146,7 @@ public class PacketSender {
 	}
 
 	public PacketSender sendURL(String url) {
+		// original opcode 251
 		PacketBuilder out = new PacketBuilder(251, PacketType.VARIABLE);
 		out.putString(url);
 		player.getSession().write(out);

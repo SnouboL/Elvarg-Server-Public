@@ -9,6 +9,7 @@ import com.elvarg.net.security.IsaacRandom;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.logging.Logger;
 
 /**
  * Represents a client which will attempt
@@ -22,6 +23,9 @@ import java.net.Socket;
  * @author Professor Oak
  */
 public class Client {
+
+    private static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
 
     private final String username;
     private final String password;
@@ -154,8 +158,9 @@ public class Client {
         incoming.currentPosition = 0;
         socketStream.flushInputStream(incoming.payload, packetSize);
 
-        switch (opcode) {
 
+        switch (opcode) {
+            case 251: logger.info("251");
         }
         return false;
     }
