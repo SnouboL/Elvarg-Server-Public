@@ -137,9 +137,12 @@ public class Runecrafting {
 			}
 			if (container.isPresent()) {
 				switch (actionType) {
-					case 1 -> container.get().store(player);
-					case 2 -> container.get().check(player);
-					case 3 -> container.get().withdraw(player);
+					case 1:
+						container.get().store(player);
+					case 2:
+						container.get().check(player);
+					case 3:
+						container.get().withdraw(player);
 				}
 				return true;
 			}

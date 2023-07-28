@@ -36,14 +36,13 @@ public class ChatPacketListener implements PacketExecutor {
     @Override
     public void execute(Player player, Packet packet) {
         switch (packet.getOpcode()) {
-            case PacketConstants.CLAN_CHAT_OPCODE -> {
+            case PacketConstants.CLAN_CHAT_OPCODE:
                 String clanMessage = packet.readString();
                 if (!allowChat(player, clanMessage)) {
                     return;
                 }
                 ClanChatManager.sendMessage(player, clanMessage);
-            }
-            case PacketConstants.REGULAR_CHAT_OPCODE -> {
+            case PacketConstants.REGULAR_CHAT_OPCODE:
                 int size = packet.getSize() - 2;
                 int color = packet.readByteS();
                 int effect = packet.readByteS();
@@ -56,7 +55,6 @@ public class ChatPacketListener implements PacketExecutor {
                     return;
                 }
                 player.getChatMessageQueue().add(new ChatMessage(color, effect, text));
-            }
         }
     }
 }

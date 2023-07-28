@@ -163,11 +163,9 @@ public final class ObjectDefinition extends ObjectIdentifiers {
             objectDef.interactions[0] = "Go Through";
             objectDef.name = "Passage";
         }
-        switch (id) {
-            case 10638 -> {
-                objectDef.isInteractive = true;
-                return objectDef;
-            }
+        if (id == 10638) {
+            objectDef.isInteractive = true;
+            return objectDef;
         }
 
 
@@ -448,13 +446,25 @@ public final class ObjectDefinition extends ObjectIdentifiers {
     public boolean hasActions() {
         return isInteractive;
     }
-    
-    public int getSize() {
-        return switch (id) {
-            case BARROWS_STAIRCASE_AHRIM, BARROWS_STAIRCASE_DHAROK, BARROWS_STAIRCASE_GUTHAN, BARROWS_STAIRCASE_KARIL, BARROWS_STAIRCASE_VERAC -> 2;
-            case BARROWS_STAIRCASE_TORAG -> 3;
-            default -> (getSizeX() + getSizeY()) - 1;
-        };
 
+    public int getSize() {
+        int size;
+        switch (id) {
+            case BARROWS_STAIRCASE_AHRIM:
+            case BARROWS_STAIRCASE_DHAROK:
+            case BARROWS_STAIRCASE_GUTHAN:
+            case BARROWS_STAIRCASE_KARIL:
+            case BARROWS_STAIRCASE_VERAC:
+                size = 2;
+                break;
+            case BARROWS_STAIRCASE_TORAG:
+                size = 3;
+                break;
+            default:
+                size = (getSizeX() + getSizeY()) - 1;
+                break;
+        }
+        return size;
     }
+
 }

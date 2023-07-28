@@ -22,7 +22,8 @@ public class EffectSpells {
             return true;
         }
         switch (spell.get()) {
-            case BONES_TO_PEACHES, BONES_TO_BANANAS -> {
+            case BONES_TO_PEACHES:
+            case BONES_TO_BANANAS:
                 if (!player.getClickDelay().elapsed(500)) {
                     return true;
                 }
@@ -42,8 +43,8 @@ public class EffectSpells {
                 player.performAnimation(new Animation(722));
                 player.getSkillManager().addExperience(Skill.MAGIC, spell.get().getSpell().baseExperience() * i);
                 player.getClickDelay().reset();
-            }
-            case VENGEANCE -> {
+
+            case VENGEANCE:
                 if (player.getDueling().inDuel()) {
                     player.getPacketSender().sendMessage("You cannot cast Vengeance during a duel!");
                     return true;
@@ -70,7 +71,6 @@ public class EffectSpells {
                 player.getInventory().deleteItemSet(EffectSpell.VENGEANCE.getSpell().itemsRequired(player));
                 player.performAnimation(new Animation(4410));
                 player.performGraphic(new Graphic(726, GraphicHeight.HIGH));
-            }
         }
         return true;
     }

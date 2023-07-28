@@ -401,7 +401,8 @@ public final class MovementQueue {
                 }
 
 				switch (npc.getId()) {
-					case NpcIdentifiers.TZTOK_JAD -> reset = false;
+					case NpcIdentifiers.TZTOK_JAD:
+						reset = false;
 				}
             }
 

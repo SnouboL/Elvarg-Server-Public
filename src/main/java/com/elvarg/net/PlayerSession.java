@@ -1,6 +1,7 @@
 package com.elvarg.net;
 
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
 import com.elvarg.game.World;
 import com.elvarg.game.entity.impl.player.Player;
@@ -28,6 +29,8 @@ import io.netty.channel.socket.SocketChannel;
  * @editor Professor Oak
  */
 public class PlayerSession {
+
+    private static final Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     /**
      * The queue of packets that will be handled on the next sequence.
@@ -134,9 +137,11 @@ public class PlayerSession {
                 continue;
             }
             try {
+                int opcode = packet.getOpcode();
+                log.info("Processing packet from player: " + player.getUsername() + ", Opcode: " + opcode);
                 PacketConstants.PACKETS[packet.getOpcode()].execute(player, packet);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.info("Error processing packet from player: " + player.getUsername() + " - " + e);
             } finally {
                 packet.getBuffer().release();
             }
@@ -155,8 +160,9 @@ public class PlayerSession {
         try {
             Packet packet = builder.toPacket();
             channel.write(packet);
+            log.info("Packet sent to player: " + player.getUsername() + ", Opcode: " + packet.getOpcode());
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.info("Error while sending packet to player: " + player.getUsername() + " - " + ex);
         }
     }
 

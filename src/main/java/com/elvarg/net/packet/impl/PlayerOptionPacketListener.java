@@ -129,10 +129,10 @@ public class PlayerOptionPacketListener implements PacketExecutor {
             return;
         }
         switch (packet.getOpcode()) {
-            case PacketConstants.ATTACK_PLAYER_OPCODE -> attack(player, packet);
-            case PacketConstants.PLAYER_OPTION_1_OPCODE -> option1(player, packet);
-            case PacketConstants.PLAYER_OPTION_2_OPCODE -> option2(player, packet);
-            case PacketConstants.PLAYER_OPTION_3_OPCODE -> option3(player, packet);
+            case PacketConstants.ATTACK_PLAYER_OPCODE:attack(player, packet);
+            case PacketConstants.PLAYER_OPTION_1_OPCODE:option1(player, packet);
+            case PacketConstants.PLAYER_OPTION_2_OPCODE:option2(player, packet);
+            case PacketConstants.PLAYER_OPTION_3_OPCODE:option3(player, packet);
         }
     }
 }

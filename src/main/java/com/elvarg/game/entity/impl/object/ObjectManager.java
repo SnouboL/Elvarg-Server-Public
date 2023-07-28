@@ -87,8 +87,10 @@ public class ObjectManager {
          * clipping via the map objects and also checks for cheatclients via them.
          */
         switch (type) {
-            case SPAWN -> MapObjects.add(object);
-            case DESPAWN -> MapObjects.remove(object);
+            case SPAWN:
+                MapObjects.add(object);
+            case DESPAWN:
+                MapObjects.remove(object);
         }
 
         /**

@@ -28,12 +28,18 @@ public class NPCOptionPacketListener extends NpcIdentifiers implements PacketExe
 		}
 
 		switch (packet.getOpcode()) {
-			case PacketConstants.ATTACK_NPC_OPCODE -> attackNPC(player, packet);
-			case PacketConstants.FIRST_CLICK_NPC_OPCODE -> firstClick(player, packet);
-			case PacketConstants.SECOND_CLICK_NPC_OPCODE -> handleSecondClick(player, packet);
-			case PacketConstants.THIRD_CLICK_NPC_OPCODE -> handleThirdClick(player, packet);
-			case PacketConstants.FOURTH_CLICK_NPC_OPCODE -> handleFourthClick(player, packet);
-			case PacketConstants.MAGE_NPC_OPCODE -> mageNpc(player, packet);
+			case PacketConstants.ATTACK_NPC_OPCODE:
+				attackNPC(player, packet);
+			case PacketConstants.FIRST_CLICK_NPC_OPCODE:
+				firstClick(player, packet);
+			case PacketConstants.SECOND_CLICK_NPC_OPCODE:
+				handleSecondClick(player, packet);
+			case PacketConstants.THIRD_CLICK_NPC_OPCODE:
+				handleThirdClick(player, packet);
+			case PacketConstants.FOURTH_CLICK_NPC_OPCODE:
+				handleFourthClick(player, packet);
+			case PacketConstants.MAGE_NPC_OPCODE:
+				mageNpc(player, packet);
 		}
 	}
 
@@ -249,14 +255,28 @@ public class NPCOptionPacketListener extends NpcIdentifiers implements PacketExe
 				}
 
 				switch (npc.getId()) {
-					case NIEVE -> player.getDialogueManager().start(new NieveDialogue(), 2);
-					case BANKER_2, BANKER_3, BANKER_4, BANKER_5, BANKER_6, BANKER_7, TZHAAR_KET_ZUH -> player.getBank(player.getCurrentBankTab()).open();
-					// Net and bait
-					case 1497, 1498 -> // Net and bait
-							player.getSkillManager().startSkillable(new Fishing(npc, FishingTool.FISHING_ROD));
-					case RICHARD_2 -> ShopManager.open(player, ShopIdentifiers.TEAMCAPE_SHOP);
-					case EMBLEM_TRADER, EMBLEM_TRADER_2, EMBLEM_TRADER_3 -> ShopManager.open(player, ShopIdentifiers.PVP_SHOP);
-					case MAGIC_INSTRUCTOR -> ShopManager.open(player, ShopIdentifiers.MAGE_ARMOR_SHOP);
+					case NIEVE:
+						player.getDialogueManager().start(new NieveDialogue(), 2);
+					case BANKER_2:
+					case BANKER_3:
+					case BANKER_4:
+					case BANKER_5:
+					case BANKER_6:
+					case BANKER_7:
+					case TZHAAR_KET_ZUH:
+						player.getBank(player.getCurrentBankTab()).open();
+					case 1497:
+					case 1498:
+						// Net and bait
+						player.getSkillManager().startSkillable(new Fishing(npc, FishingTool.FISHING_ROD));
+					case RICHARD_2:
+						ShopManager.open(player, ShopIdentifiers.TEAMCAPE_SHOP);
+					case EMBLEM_TRADER:
+					case EMBLEM_TRADER_2:
+					case EMBLEM_TRADER_3:
+						ShopManager.open(player, ShopIdentifiers.PVP_SHOP);
+					case MAGIC_INSTRUCTOR:
+						ShopManager.open(player, ShopIdentifiers.MAGE_ARMOR_SHOP);
 				}
 			}
 			

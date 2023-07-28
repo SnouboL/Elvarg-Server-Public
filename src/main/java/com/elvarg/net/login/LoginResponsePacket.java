@@ -2,12 +2,15 @@ package com.elvarg.net.login;
 
 import com.elvarg.game.model.rights.PlayerRights;
 
+import java.util.logging.Logger;
+
 /**
  * The packet that contains information about a players login attempt.
  *
  * @author Vult-R
  */
 public final class LoginResponsePacket {
+
 
     /**
      * The login response that was indicated.

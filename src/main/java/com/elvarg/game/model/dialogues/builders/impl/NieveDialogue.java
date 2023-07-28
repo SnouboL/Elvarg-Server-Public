@@ -19,10 +19,14 @@ public class NieveDialogue extends DynamicDialogueBuilder {
 
         add(new OptionDialogue(1, (option) -> {
             switch (option) {
-                case FIRST_OPTION -> player.getDialogueManager().start(2);
-                case SECOND_OPTION -> player.getDialogueManager().start(8);
-                case THIRD_OPTION -> player.getDialogueManager().start(11);
-                default -> player.getPacketSender().sendInterfaceRemoval();
+                case FIRST_OPTION:
+                    player.getDialogueManager().start(2);
+                case SECOND_OPTION:
+                    player.getDialogueManager().start(8);
+                case THIRD_OPTION:
+                    player.getDialogueManager().start(11);
+                default:
+                    player.getPacketSender().sendInterfaceRemoval();
             }
         }, "I need another assignment.", "Have you any rewards for me, or anything to trade?",
                 "Tell me about your skillcape, please.", "Er.... Nothing..."));

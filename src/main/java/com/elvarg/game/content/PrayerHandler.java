@@ -23,12 +23,34 @@ import com.elvarg.util.Misc;
  */
 public class PrayerHandler {
 
-    public static final int THICK_SKIN = 0, BURST_OF_STRENGTH = 1, CLARITY_OF_THOUGHT = 2, SHARP_EYE = 3,
-            MYSTIC_WILL = 4, ROCK_SKIN = 5, SUPERHUMAN_STRENGTH = 6, IMPROVED_REFLEXES = 7, RAPID_RESTORE = 8,
-            RAPID_HEAL = 9, PROTECT_ITEM = 10, HAWK_EYE = 11, MYSTIC_LORE = 12, STEEL_SKIN = 13, ULTIMATE_STRENGTH = 14,
-            INCREDIBLE_REFLEXES = 15, PROTECT_FROM_MAGIC = 16, PROTECT_FROM_MISSILES = 17, PROTECT_FROM_MELEE = 18,
-            EAGLE_EYE = 19, MYSTIC_MIGHT = 20, RETRIBUTION = 21, REDEMPTION = 22, SMITE = 23, PRESERVE = 24,
-            CHIVALRY = 25, PIETY = 26, RIGOUR = 27, AUGURY = 28;
+    public static final int THICK_SKIN = 0,
+            BURST_OF_STRENGTH = 1,
+            CLARITY_OF_THOUGHT = 2,
+            SHARP_EYE = 3,
+            MYSTIC_WILL = 4,
+            ROCK_SKIN = 5,
+            SUPERHUMAN_STRENGTH = 6,
+            IMPROVED_REFLEXES = 7,
+            RAPID_RESTORE = 8,
+            RAPID_HEAL = 9,
+            PROTECT_ITEM = 10,
+            HAWK_EYE = 11,
+            MYSTIC_LORE = 12,
+            STEEL_SKIN = 13,
+            ULTIMATE_STRENGTH = 14,
+            INCREDIBLE_REFLEXES = 15,
+            PROTECT_FROM_MAGIC = 16,
+            PROTECT_FROM_MISSILES = 17,
+            PROTECT_FROM_MELEE = 18,
+            EAGLE_EYE = 19,
+            MYSTIC_MIGHT = 20,
+            RETRIBUTION = 21,
+            REDEMPTION = 22, SMITE = 23,
+            PRESERVE = 24,
+            CHIVALRY = 25,
+            PIETY = 26,
+            RIGOUR = 27,
+            AUGURY = 28;
     /**
      * Contains every prayer that counts as a defense prayer.
      */
@@ -69,12 +91,18 @@ public class PrayerHandler {
      * @return the protecting prayer.
      */
     public static int getProtectingPrayer(CombatType type) {
-        return switch (type) {
-            case MELEE -> PROTECT_FROM_MELEE;
-            case MAGIC -> PROTECT_FROM_MAGIC;
-            case RANGED -> PROTECT_FROM_MISSILES;
-        };
+        switch (type) {
+            case MELEE:
+                return PROTECT_FROM_MELEE;
+            case MAGIC:
+                return PROTECT_FROM_MAGIC;
+            case RANGED:
+                return PROTECT_FROM_MISSILES;
+            default:
+                throw new IllegalArgumentException("Invalid combat type: " + type);
+        }
     }
+
 
     public static boolean isActivated(Mobile c, int prayer) {
         return c.getPrayerActive()[prayer];
@@ -148,32 +176,54 @@ public class PrayerHandler {
         }
 
         switch (prayerId) {
-            case THICK_SKIN, ROCK_SKIN, STEEL_SKIN -> resetPrayers(character, DEFENCE_PRAYERS, prayerId);
+            case THICK_SKIN:
+            case ROCK_SKIN:
+            case STEEL_SKIN:
+                resetPrayers(character, DEFENCE_PRAYERS, prayerId);
+                break;
 
-            case BURST_OF_STRENGTH, SUPERHUMAN_STRENGTH, ULTIMATE_STRENGTH -> {
+            case BURST_OF_STRENGTH:
+            case SUPERHUMAN_STRENGTH:
+            case ULTIMATE_STRENGTH:
                 resetPrayers(character, STRENGTH_PRAYERS, prayerId);
                 resetPrayers(character, RANGED_PRAYERS, prayerId);
                 resetPrayers(character, MAGIC_PRAYERS, prayerId);
-            }
-            case CLARITY_OF_THOUGHT, IMPROVED_REFLEXES, INCREDIBLE_REFLEXES -> {
+                break;
+
+            case CLARITY_OF_THOUGHT:
+            case IMPROVED_REFLEXES:
+            case INCREDIBLE_REFLEXES:
                 resetPrayers(character, ATTACK_PRAYERS, prayerId);
                 resetPrayers(character, RANGED_PRAYERS, prayerId);
                 resetPrayers(character, MAGIC_PRAYERS, prayerId);
-            }
-            case SHARP_EYE, HAWK_EYE, EAGLE_EYE, MYSTIC_WILL, MYSTIC_LORE, MYSTIC_MIGHT -> {
+                break;
+
+            case SHARP_EYE:
+            case HAWK_EYE:
+            case EAGLE_EYE:
+            case MYSTIC_WILL:
+            case MYSTIC_LORE:
+            case MYSTIC_MIGHT:
                 resetPrayers(character, STRENGTH_PRAYERS, prayerId);
                 resetPrayers(character, ATTACK_PRAYERS, prayerId);
                 resetPrayers(character, RANGED_PRAYERS, prayerId);
                 resetPrayers(character, MAGIC_PRAYERS, prayerId);
-            }
-            case CHIVALRY, PIETY, RIGOUR, AUGURY -> {
+                break;
+
+            case CHIVALRY:
+            case PIETY:
+            case RIGOUR:
+            case AUGURY:
                 resetPrayers(character, DEFENCE_PRAYERS, prayerId);
                 resetPrayers(character, STRENGTH_PRAYERS, prayerId);
                 resetPrayers(character, ATTACK_PRAYERS, prayerId);
                 resetPrayers(character, RANGED_PRAYERS, prayerId);
                 resetPrayers(character, MAGIC_PRAYERS, prayerId);
-            }
-            case PROTECT_FROM_MAGIC, PROTECT_FROM_MISSILES, PROTECT_FROM_MELEE, RETRIBUTION, REDEMPTION, SMITE -> resetPrayers(character, OVERHEAD_PRAYERS, prayerId);
+                break;
+
+            case PROTECT_FROM_MAGIC:
+            case PROTECT_FROM_MISSILES:
+
         }
         character.setPrayerActive(prayerId, true);
 

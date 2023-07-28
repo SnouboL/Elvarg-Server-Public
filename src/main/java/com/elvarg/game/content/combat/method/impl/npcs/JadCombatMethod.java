@@ -31,17 +31,16 @@ public class JadCombatMethod extends CombatMethod {
             combatType = CombatType.MELEE;
         }
         switch (combatType) {
-            case MELEE -> character.performAnimation(MELEE_ATTACK_ANIM);
-            case RANGED -> {
+            case MELEE:
+                character.performAnimation(MELEE_ATTACK_ANIM);
+            case RANGED:
                 character.performAnimation(RANGED_ATTACK_ANIM);
                 target.delayedGraphic(RANGED_ATTACK_GRAPHIC, 2);
-            }
-            case MAGIC -> {
+            case MAGIC:
                 character.performAnimation(MAGIC_ATTACK_ANIM);
                 new Projectile(character, target, MAGIC_ATTACK_PROJECTILE, 25, 100, 110, 33).sendProjectile();
-            }
-            default -> {
-            }
+            default:
+                System.out.println("\tpublic void start(Mobile character, Mobile target) {\n");
         }
 	}
 

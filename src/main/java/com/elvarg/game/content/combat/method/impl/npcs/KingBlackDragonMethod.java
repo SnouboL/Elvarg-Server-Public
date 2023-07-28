@@ -13,6 +13,8 @@ import com.elvarg.game.model.Projectile;
 import com.elvarg.game.task.impl.CombatPoisonEffect.PoisonType;
 import com.elvarg.util.Misc;
 
+import javax.swing.text.Style;
+
 public class KingBlackDragonMethod extends CombatMethod {
 
     private CombatType currentAttackType = CombatType.MAGIC;
@@ -23,12 +25,14 @@ public class KingBlackDragonMethod extends CombatMethod {
         if (currentAttackType == CombatType.MAGIC) {
             character.performAnimation(new Animation(84));
             switch (currentBreath) {
-                case DRAGON -> new Projectile(character, target, 393, 40, 55, 31, 43).sendProjectile();
-                case ICE -> new Projectile(character, target, 396, 40, 55, 31, 43).sendProjectile();
-                case POISON -> new Projectile(character, target, 394, 40, 55, 31, 43).sendProjectile();
-                case SHOCK -> new Projectile(character, target, 395, 40, 55, 31, 43).sendProjectile();
-                default -> {
-                }
+                case DRAGON:
+                    new Projectile(character, target, 393, 40, 55, 31, 43).sendProjectile();
+                case ICE:
+                    new Projectile(character, target, 396, 40, 55, 31, 43).sendProjectile();
+                case POISON: new Projectile(character, target, 394, 40, 55, 31, 43).sendProjectile();
+                case SHOCK: new Projectile(character, target, 395, 40, 55, 31, 43).sendProjectile();
+                default:
+                    System.out.println("    public void start(Mobile character, Mobile target) {\n");
             }
         } else if (currentAttackType == CombatType.MELEE) {
             character.performAnimation(new Animation(91));
@@ -75,10 +79,12 @@ public class KingBlackDragonMethod extends CombatMethod {
             }
             if (currentAttackType == CombatType.MAGIC) {
                 switch (currentBreath) {
-                    case ICE -> CombatFactory.freeze(hit.getTarget().getAsPlayer(), 5);
-                    case POISON -> CombatFactory.poisonEntity(hit.getTarget().getAsPlayer(), PoisonType.SUPER);
-                    default -> {
-                    }
+                    case ICE:
+                        CombatFactory.freeze(hit.getTarget().getAsPlayer(), 5);
+                    case POISON:
+                        CombatFactory.poisonEntity(hit.getTarget().getAsPlayer(), PoisonType.SUPER);
+                    default:
+                        System.out.println("\tpublic PendingHit[] hits(Mobile character, Mobile target) {\n");
                 }
             }
         }

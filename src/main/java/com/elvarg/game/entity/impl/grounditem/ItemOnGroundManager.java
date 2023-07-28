@@ -108,9 +108,13 @@ public class ItemOnGroundManager {
 		if (item.getPosition().getDistance(player.getLocation()) > 64)
 			return;
 		switch (type) {
-			case ALTER -> player.getPacketSender().alterGroundItem(item);
-			case DELETE -> player.getPacketSender().deleteGroundItem(item);
-			case CREATE -> {
+			case ALTER:
+				player.getPacketSender().alterGroundItem(item);
+				break;
+			case DELETE:
+				player.getPacketSender().deleteGroundItem(item);
+				break;
+			case CREATE:
 				if (!isOwner(player.getUsername(), item)) {
 					if (item.getState() == State.SEEN_BY_PLAYER)
 						return;
@@ -118,9 +122,9 @@ public class ItemOnGroundManager {
 						return;
 				}
 				player.getPacketSender().createGroundItem(item);
-			}
-			default -> throw new UnsupportedOperationException(
-					"Unsupported operation (" + type + ")  on: " + item);
+				break;
+			default:
+				throw new UnsupportedOperationException("Unsupported operation (" + type + ") on: " + item);
 		}
 	}
 

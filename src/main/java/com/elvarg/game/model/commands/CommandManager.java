@@ -84,7 +84,7 @@ public class CommandManager {
         /**
          * Players Command
          */
-        put(new ChangePassword(), "changepassword");
+        put(new ChangePassword(), "changepassword", "cpw");
         put(new LockExperience(), "lockxp");
         put(new Claim(), "claim");
         put(new CreationDate(), "creationdate");

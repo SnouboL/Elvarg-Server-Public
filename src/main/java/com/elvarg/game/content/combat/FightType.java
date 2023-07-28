@@ -226,13 +226,19 @@ public enum FightType {
      * @return the corresponding bonus for this fight type.
      */
     public int getCorrespondingBonus() {
-        return switch (bonusType) {
-            case BonusManager.ATTACK_CRUSH -> BonusManager.DEFENCE_CRUSH;
-            case BonusManager.ATTACK_MAGIC -> BonusManager.DEFENCE_MAGIC;
-            case BonusManager.ATTACK_RANGE -> BonusManager.DEFENCE_RANGE;
-            case BonusManager.ATTACK_SLASH -> BonusManager.DEFENCE_SLASH;
-            case BonusManager.ATTACK_STAB -> BonusManager.DEFENCE_STAB;
-            default -> BonusManager.DEFENCE_CRUSH;
-        };
+        switch (bonusType) {
+            case BonusManager.ATTACK_MAGIC:
+                return BonusManager.DEFENCE_MAGIC;
+            case BonusManager.ATTACK_RANGE:
+                return BonusManager.DEFENCE_RANGE;
+            case BonusManager.ATTACK_SLASH:
+                return BonusManager.DEFENCE_SLASH;
+            case BonusManager.ATTACK_STAB:
+                return BonusManager.DEFENCE_STAB;
+            case BonusManager.ATTACK_CRUSH:
+            default:
+                return BonusManager.DEFENCE_CRUSH;
+        }
     }
+
 }

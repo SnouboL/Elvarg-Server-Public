@@ -67,7 +67,7 @@ public class PlayerDeathTask extends Task {
 		}
 		try {
             switch (ticks) {
-                case 2 -> {
+                case 2:
                     // Reset combat..
                     player.getCombat().reset();
 
@@ -90,8 +90,8 @@ public class PlayerDeathTask extends Task {
                     if (PrayerHandler.isActivated(player, PrayerHandler.RETRIBUTION)) {
                         killer.ifPresent(value -> CombatFactory.handleRetribution(player, value));
                     }
-                }
-                case 0 -> {
+
+                case 0:
                     if (player.getArea() != null) {
                         loseItems = player.getArea().dropItemsOnDeath(player, killer);
                     }
@@ -219,7 +219,6 @@ public class PlayerDeathTask extends Task {
 
                     // Stop the event..
                     stop();
-                }
             }
 			ticks--;
 		} catch (Exception e) {

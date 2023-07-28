@@ -151,7 +151,10 @@ public class UseItemPacketListener extends ItemIdentifiers implements PacketExec
         //Handle object..
         switch (object.getId()) { //Edgeville Stove
             //Player-made Fire
-            case ObjectIdentifiers.STOVE_4, ObjectIdentifiers.FIRE_5, ObjectIdentifiers.FIRE_23 -> { //Barb village fire
+            case ObjectIdentifiers.STOVE_4:
+            case ObjectIdentifiers.FIRE_5:
+            case ObjectIdentifiers.FIRE_23:
+                //Barb village fire
                 //Handle cooking on objects..
                 Optional<Cookable> cookable = Cookable.getForItem(item.getId());
                 if (cookable.isPresent()) {
@@ -170,13 +173,12 @@ public class UseItemPacketListener extends ItemIdentifiers implements PacketExec
                         return;
                     }
                 }
-            }
-            case 409 -> { //Bone on Altar
+            case 409:
+                //Bone on Altar
                 Optional<BuriableBone> b = BuriableBone.forId(item.getId());
                 b.ifPresent(buriableBone -> player.getPacketSender().sendCreationMenu(new CreationMenu("How many would you like to offer?", List.of(itemId), (productId, amount) -> {
                     player.getSkillManager().startSkillable(new AltarOffering(buriableBone, object, amount));
                 })));
-            }
         }
     }
 
@@ -222,13 +224,13 @@ public class UseItemPacketListener extends ItemIdentifiers implements PacketExec
 
                 //Handle used item..
                 switch (usedItemId) {
-                    case TINDERBOX -> { //Lighting a fire..
+                    case TINDERBOX:
+                        //Lighting a fire..
                         Optional<LightableLog> log = LightableLog.getForItem(groundItemId);
                         if (log.isPresent()) {
                             player.getSkillManager().startSkillable(new Firemaking(log.get(), groundItem.get()));
                             return;
                         }
-                    }
                 }
             }
             
@@ -245,11 +247,11 @@ public class UseItemPacketListener extends ItemIdentifiers implements PacketExec
         if (player.getHitpoints() <= 0)
             return;
         switch (packet.getOpcode()) {
-            case PacketConstants.ITEM_ON_ITEM -> itemOnItem(player, packet);
-            case PacketConstants.ITEM_ON_OBJECT -> itemOnObject(player, packet);
-            case PacketConstants.ITEM_ON_GROUND_ITEM -> itemOnGroundItem(player, packet);
-            case PacketConstants.ITEM_ON_NPC -> itemOnNpc(player, packet);
-            case PacketConstants.ITEM_ON_PLAYER -> itemOnPlayer(player, packet);
+            case PacketConstants.ITEM_ON_ITEM:itemOnItem(player, packet);
+            case PacketConstants.ITEM_ON_OBJECT:itemOnObject(player, packet);
+            case PacketConstants.ITEM_ON_GROUND_ITEM:itemOnGroundItem(player, packet);
+            case PacketConstants.ITEM_ON_NPC:itemOnNpc(player, packet);
+            case PacketConstants.ITEM_ON_PLAYER:itemOnPlayer(player, packet);
         }
     }
 }

@@ -135,10 +135,17 @@ public class DamageFormulas {
 
         if (c.isPlayer()) {
             switch (c.getAsPlayer().getEquipment().getItems()[Equipment.WEAPON_SLOT].getId()) {
-                case 4675, 6914, 21006 -> maxHit *= 1.10;
-                case 11791 -> maxHit *= 1.15;
-                case 12904 -> maxHit *= 1.18;
-                case 12899, 11905 -> maxHit *= 1.16;
+                case 4675:
+                case 6914:
+                case 21006:
+                    return maxHit * (int) 1.10;
+                case 11791:
+                    return maxHit * (int) 1.15;
+                case 12904:
+                    return maxHit * (int) 1.18;
+                case 12899:
+                case 11905:
+                    return maxHit * (int) 1.16;
             }
         }
 

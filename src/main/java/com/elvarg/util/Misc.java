@@ -741,7 +741,7 @@ public class Misc {
         }
 
         // handle any extra chars in current word
-        if (!word.isEmpty()) {
+        if (!(word.length() == 0)) {
             if ((line.length() + word.length()) > len) {
                 String line_ = line.toString();
 
@@ -757,7 +757,7 @@ public class Misc {
         }
 
         // handle extra line
-        if (!line.isEmpty()) {
+        if (!(line.length() == 0)) {
             String line_ = line.toString();
 
             // Apply effects

@@ -67,7 +67,7 @@ public class EquipPacketListener implements PacketExecutor {
 		player.getSkillManager().stopSkillable();
 
 		switch (interfaceId) {
-			case Inventory.INTERFACE_ID -> {
+			case Inventory.INTERFACE_ID:
 				// Check if player can wield the item..
 				if (item.getDefinition().getRequirements() != null) {
 					for (Skill skill : Skill.values()) {
@@ -119,9 +119,7 @@ public class EquipPacketListener implements PacketExecutor {
 				}
 				Item equipItem = player.getEquipment().forSlot(equipmentSlot).clone();
 				if (equipItem.getDefinition().isStackable() && equipItem.getId() == item.getId()) {
-					int amount = equipItem.getAmount() + item.getAmount() <= Integer.MAX_VALUE
-							? equipItem.getAmount() + item.getAmount()
-							: Integer.MAX_VALUE;
+					int amount = Math.min(equipItem.getAmount() + item.getAmount(), Integer.MAX_VALUE);
 					player.getInventory().delete(item, false);
 					player.getEquipment().getItems()[equipmentSlot].setAmount(amount);
 					equipItem.setAmount(amount);
@@ -188,7 +186,6 @@ public class EquipPacketListener implements PacketExecutor {
 					player.getInventory().refreshItems();
 				}
 				player.getUpdateFlag().flag(Flag.APPEARANCE);
-			}
 		}
 	}
 }

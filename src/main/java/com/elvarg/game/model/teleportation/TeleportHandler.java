@@ -140,7 +140,8 @@ public class TeleportHandler {
 		TeleportButton teleportButton = TeleportButton.get(buttonId);
 		if (teleportButton != null) {
 			switch (menuId) {
-				case 0 -> { // Click to teleport
+				case 0:
+					// Click to teleport
 					if (teleportButton == TeleportButton.HOME) {
 						if (TeleportHandler.checkReqs(player, GameConstants.DEFAULT_LOCATION)) {
 							TeleportHandler.teleport(player, GameConstants.DEFAULT_LOCATION,
@@ -151,8 +152,8 @@ public class TeleportHandler {
 					}
 					player.getPacketSender().sendTeleportInterface(teleportButton.menu);
 					return true;
-				}
-				case 1 -> { // Previous option on teleport
+				case 1:
+					// Previous option on teleport
 					if (player.getPreviousTeleports().containsKey(teleportButton)) {
 						Location tele = player.getPreviousTeleports().get(teleportButton);
 						if (TeleportHandler.checkReqs(player, tele)) {
@@ -163,7 +164,6 @@ public class TeleportHandler {
 					}
 					player.getPacketSender().sendInterfaceRemoval();
 					return true;
-				}
 			}
 		}
 		return false;

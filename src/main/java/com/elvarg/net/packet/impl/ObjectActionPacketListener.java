@@ -259,10 +259,14 @@ public class ObjectActionPacketListener extends ObjectIdentifiers implements Pac
                 }
 
                 switch (clickType) {
-                    case 1 -> firstClick(player, object);
-                    case 2 -> secondClick(player, object);
-                    case 3 -> thirdClick(player, object);
-                    case 4 -> fourthClick(player, object);
+                    case 1:
+                        firstClick(player, object);
+                    case 2:
+                        secondClick(player, object);
+                    case 3:
+                        thirdClick(player, object);
+                    case 4:
+                        fourthClick(player, object);
                 }
             }
             

@@ -1,5 +1,6 @@
 package com.elvarg.net.codec;
 
+import com.elvarg.Server;
 import com.elvarg.net.packet.Packet;
 import com.elvarg.net.packet.PacketType;
 import com.elvarg.net.security.IsaacRandom;
@@ -8,10 +9,15 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
+import java.util.logging.Logger;
+
 /**
  * Encodes packets before they're sent to the channel.
  */
 public class PacketEncoder extends MessageToByteEncoder<Packet> {
+
+    private static final Logger logger = Logger.getLogger(Server.class.getSimpleName());
+
 
     /**
      * The encoder used for encryption of the packet.
@@ -38,7 +44,8 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> {
         if (type == PacketType.FIXED) {
             int currSize = CLIENT_PACKET_SIZES[packet.getOpcode()];
             if (size != currSize) {
-                System.err.println("{PacketEncoder} Opcode " + packet.getOpcode() + " has defined size " + currSize + " but is actually " + size + ".");
+                logger.info("opcode: " + opcode + ", type:" + type + ",size: " + size + ",currSize: " + currSize);
+//                System.err.println("{PacketEncoder} Opcode " + packet.getOpcode() + " has defined size " + currSize + " but is actually " + size + ".");
                 return;
             }
         } else if (type == PacketType.VARIABLE) {
@@ -54,42 +61,46 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> {
                 return;
             }
         }
-        
+
         int finalSize = size + 1;
         switch (type) {
-            case VARIABLE -> {
-                if (size > 255) { // trying to send more data then we can represent with 8 bits!
+            case VARIABLE:
+                if (size > 255) { // trying to send more data than we can represent with 8 bits!
                     throw new IllegalArgumentException("Tried to send packet length " + size + " in variable-byte packet");
                 }
                 finalSize++;
-            }
-            case VARIABLE_SHORT -> {
-                if (size > 65535) { // trying to send more data then we can represent with 8 bits!
+                break; // Add break statement to exit the switch block after executing this case
+            case VARIABLE_SHORT:
+                if (size > 65535) { // trying to send more data than we can represent with 16 bits!
                     throw new IllegalArgumentException("Tried to send packet length " + size + " in variable-short packet");
                 }
                 finalSize += 2;
-            }
-            default -> {
-            }
+                break; // Add break statement to exit the switch block after executing this case
+            default:
+                break;
         }
 
         // Create a new buffer
         ByteBuf buffer = Unpooled.buffer(finalSize);
-        
+
         // Write opcode
         buffer.writeByte(opcode);
-        
+
         // Write packet size
         switch (type) {
-            case VARIABLE -> buffer.writeByte((byte) size);
-            case VARIABLE_SHORT -> buffer.writeShort((short) size);
-            default -> {
-            }
+            case VARIABLE:
+                buffer.writeByte((byte) size);
+                break; // Add break statement to exit the switch block after executing this case
+            case VARIABLE_SHORT:
+                buffer.writeShort((short) size);
+                break; // Add break statement to exit the switch block after executing this case
+            default:
+                break;
         }
-        
+
         // Write packet
         buffer.writeBytes(packet.getBuffer());
-        
+
         // Write the packet to the out buffer
         out.writeBytes(buffer);
     }

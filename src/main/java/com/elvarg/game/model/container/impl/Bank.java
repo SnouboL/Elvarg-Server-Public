@@ -314,14 +314,15 @@ public class Bank extends ItemContainer {
         if (player.getInterfaceId() == 32500) {
             // Handle bank settings
             switch (button) {
-                case 32503 -> player.getPacketSender().sendInterfaceRemoval();
-                case 32512 -> player.getBank(player.getCurrentBankTab()).open();
-                case 32513 -> {
+                case 32503:
+                    player.getPacketSender().sendInterfaceRemoval();
+                case 32512:
+                    player.getBank(player.getCurrentBankTab()).open();
+                case 32513:
                     player.setPlaceholders(!player.isPlaceholders());
                     player.getPacketSender().sendConfig(118, player.isPlaceholders() ? 1 : 0);
                     player.getPacketSender().sendMessage(
                             "Placeholders are now " + (player.isPlaceholders() ? "enabled" : "disabled") + ".");
-                }
             }
             return true;
         } else if (player.getInterfaceId() == 5292) {
@@ -399,19 +400,26 @@ public class Bank extends ItemContainer {
                 }
 
                 switch (button) {
-                    case 50013 -> {
+                    case 50013:
                         // Show menu
                         player.getPacketSender().sendInterfaceRemoval();
                         player.getPacketSender().sendInterface(32500);
-                    }
-                    case 5386 -> player.setNoteWithdrawal(true);
-                    case 5387 -> player.setNoteWithdrawal(false);
-                    case 8130 -> player.setInsertMode(false);
-                    case 8131 -> player.setInsertMode(true);
-                    case 50004 -> depositItems(player, player.getInventory(), false);
-                    case 50007 -> depositItems(player, player.getEquipment(), false);
-                    case 5384, 50001 -> player.getPacketSender().sendInterfaceRemoval();
-                    case 50010 -> {
+                    case 5386:
+                        player.setNoteWithdrawal(true);
+                    case 5387:
+                        player.setNoteWithdrawal(false);
+                    case 8130:
+                        player.setInsertMode(false);
+                    case 8131:
+                        player.setInsertMode(true);
+                    case 50004:
+                        depositItems(player, player.getInventory(), false);
+                    case 50007:
+                        depositItems(player, player.getEquipment(), false);
+                    case 5384:
+                    case 50001:
+                        player.getPacketSender().sendInterfaceRemoval();
+                    case 50010:
                         if (player.isSearchingBank()) {
                             exitSearch(player, true);
                             return true;
@@ -420,7 +428,6 @@ public class Bank extends ItemContainer {
                             Bank.search(player, input);
                         });
                         player.getPacketSender().sendEnterInputPrompt("What do you wish to search for?");
-                    }
                 }
             }
             return true;

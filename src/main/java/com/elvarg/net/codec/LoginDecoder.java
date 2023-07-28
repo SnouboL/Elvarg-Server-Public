@@ -18,6 +18,7 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Logger;
 
 /**
  * Attempts to decode a player's login request.
@@ -25,7 +26,7 @@ import java.util.Random;
  * @author Professor Oak
  */
 public final class LoginDecoder extends ByteToMessageDecoder {
-
+    private static final Logger logger = Logger.getLogger(Server.class.getSimpleName());
     /**
      * Generates random numbers via secure cryptography. Generates the session key
      * for packet encryption.
@@ -57,14 +58,23 @@ public final class LoginDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws Exception {
         switch (state) {
-            case LOGIN_REQUEST -> decodeRequest(ctx, buffer);
-            case LOGIN_TYPE -> decodeType(ctx, buffer);
-            case LOGIN -> decodeLogin(ctx, buffer, out);
+            case LOGIN_REQUEST:
+                decodeRequest(ctx, buffer);
+                break;
+            case LOGIN_TYPE:
+                decodeType(ctx, buffer);
+                break;
+            case LOGIN:
+                decodeLogin(ctx, buffer, out);
+                break;
+            default:
+                // Handle unknown state if necessary
         }
     }
 
-    private void decodeRequest(ChannelHandlerContext ctx, ByteBuf buffer) {
 
+    private void decodeRequest(ChannelHandlerContext ctx, ByteBuf buffer) {
+        logger.info("Received login request.");
         if (!buffer.isReadable()) {
             ctx.channel().close();
             return;
@@ -78,6 +88,8 @@ public final class LoginDecoder extends ByteToMessageDecoder {
         }
 
         // Send information to the client
+        logger.info("Sending login response.");
+
         ByteBuf buf = Unpooled.buffer(Byte.BYTES + Long.BYTES);
         buf.writeByte(0); // 0 = continue login
         buf.writeLong(random.nextLong()); // This long will be used for
@@ -101,7 +113,7 @@ public final class LoginDecoder extends ByteToMessageDecoder {
             sendLoginResponse(ctx, LoginResponses.LOGIN_BAD_SESSION_ID);
             return;
         }
-
+        logger.info("Received login type.");
         state = LoginDecoderState.LOGIN;
     }
 
@@ -182,6 +194,7 @@ public final class LoginDecoder extends ByteToMessageDecoder {
             String password = ByteBufUtils.readString(rsaBuffer);
 
             if (username.length() < 3 || username.length() > 12 || password.length() < 3 || password.length() > 20) {
+                logger.info("Invalid credentials combination: username=" + username + ", password=" + password);
                 sendLoginResponse(ctx, LoginResponses.INVALID_CREDENTIALS_COMBINATION);
                 return;
             }

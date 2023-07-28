@@ -253,7 +253,8 @@ public class ItemActionPacketListener implements PacketExecutor {
 		}
 
 		switch (itemId) {
-			case 12926 -> player.getPacketSender()
+			case 12926:
+				player.getPacketSender()
 					.sendMessage("Your Toxic blowpipe has " + player.getBlowpipeScales() + " Zulrah scales left.");
 		}
 	}
@@ -263,9 +264,12 @@ public class ItemActionPacketListener implements PacketExecutor {
 		if (player == null || player.getHitpoints() <= 0)
 			return;
 		switch (packet.getOpcode()) {
-			case PacketConstants.SECOND_ITEM_ACTION_OPCODE -> secondAction(player, packet);
-			case PacketConstants.FIRST_ITEM_ACTION_OPCODE -> firstAction(player, packet);
-			case PacketConstants.THIRD_ITEM_ACTION_OPCODE -> thirdClickAction(player, packet);
+			case PacketConstants.SECOND_ITEM_ACTION_OPCODE:
+				secondAction(player, packet);
+			case PacketConstants.FIRST_ITEM_ACTION_OPCODE:
+				firstAction(player, packet);
+			case PacketConstants.THIRD_ITEM_ACTION_OPCODE:
+				thirdClickAction(player, packet);
 		}
 	}
 }

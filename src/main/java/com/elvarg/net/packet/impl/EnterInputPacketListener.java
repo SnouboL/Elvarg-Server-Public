@@ -23,7 +23,7 @@ public class EnterInputPacketListener implements PacketExecutor {
         }
 
         switch (packet.getOpcode()) {
-            case PacketConstants.ENTER_SYNTAX_OPCODE -> {
+            case PacketConstants.ENTER_SYNTAX_OPCODE:
                 String name = ByteBufUtils.readString(packet.getBuffer());
                 if (name == null)
                     return;
@@ -31,8 +31,7 @@ public class EnterInputPacketListener implements PacketExecutor {
                     player.getEnteredSyntaxAction().execute(name);
                     player.setEnteredSyntaxAction(null);
                 }
-            }
-            case PacketConstants.ENTER_AMOUNT_OPCODE -> {
+            case PacketConstants.ENTER_AMOUNT_OPCODE:
                 int amount = packet.readInt();
                 if (amount <= 0)
                     return;
@@ -40,7 +39,6 @@ public class EnterInputPacketListener implements PacketExecutor {
                     player.getEnteredAmountAction().execute(amount);
                     player.setEnteredAmountAction(null);
                 }
-            }
         }
     }
 }

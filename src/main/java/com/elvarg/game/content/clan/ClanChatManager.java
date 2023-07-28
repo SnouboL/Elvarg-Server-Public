@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.elvarg.game.GameLogic;
@@ -526,7 +527,7 @@ public class ClanChatManager {
 		if (player.getInterfaceId() == CLAN_CHAT_SETUP_INTERFACE_ID) {
 			ClanChat clan = getClanChat(player);
 			switch (button) {
-				case 38319 -> {
+				case 38319:
 					if (menuId == 0) {
 						player.setEnteredSyntaxAction((input) -> {
 							if (input.length() > 12) {
@@ -543,30 +544,14 @@ public class ClanChatManager {
 						delete(player);
 					}
 					return true;
-				}
-				case 38322, 38325, 38328 -> {
+				case 38322:
+				case 38325:
+				case 38328:
 					if (clan == null) {
 						player.getPacketSender().sendMessage("Please enable your clanchat before changing this.");
 						return true;
 					}
-					ClanChatRank rank = null;
-					if (menuId == 0) {
-						rank = ClanChatRank.OWNER;
-					} else if (menuId == 1) {
-						rank = ClanChatRank.GENERAL;
-					} else if (menuId == 2) {
-						rank = ClanChatRank.CAPTAIN;
-					} else if (menuId == 3) {
-						rank = ClanChatRank.LIEUTENANT;
-					} else if (menuId == 4) {
-						rank = ClanChatRank.SERGEANT;
-					} else if (menuId == 5) {
-						rank = ClanChatRank.CORPORAL;
-					} else if (menuId == 6) {
-						rank = ClanChatRank.RECRUIT;
-					} else if (menuId == 7) {
-						rank = ClanChatRank.FRIEND;
-					}
+					ClanChatRank rank = getClanChatRank(menuId);
 					if (button == 38322) {
 						if (clan.getRankRequirement()[ClanChat.RANK_REQUIRED_TO_ENTER] != null
 								&& clan.getRankRequirement()[ClanChat.RANK_REQUIRED_TO_ENTER] == rank) {
@@ -612,9 +597,12 @@ public class ClanChatManager {
 						updateList(clan);
 					}
 					return true;
-				}
+				default:
+					System.out.println("handleButton(Player player, int button, int menuId) - switch - default");
 			}
+
 		}
+
 
 		// Selecting a player in one of the lists to manage them
 		String target = null;
@@ -626,7 +614,7 @@ public class ClanChatManager {
 				return true;
 			}
 			int index = (button - 37144);
-			target = getPlayer(index, player.getCurrentClanChat()).getUsername();
+			target = Objects.requireNonNull(getPlayer(index, player.getCurrentClanChat())).getUsername();
 			clan = player.getCurrentClanChat();
 		} else if (button >= 38752 && button <= 38951) {
 			int index = button - 38752;
@@ -727,14 +715,13 @@ public class ClanChatManager {
 
 		// Other buttons..
 		switch (button) {
-			case 37132 -> { // CC Setup
+			case 37132:
 				if (player.busy()) {
 					player.getPacketSender().sendInterfaceRemoval();
 				}
 				clanChatSetupInterface(player);
 				return true;
-			}
-			case 37129 -> { // Join / Leave clan
+			case 37129:
 				if (player.getCurrentClanChat() == null) {
 					player.setEnteredSyntaxAction((input) -> {
 						ClanChatManager.join(player, input);
@@ -745,9 +732,32 @@ public class ClanChatManager {
 					player.setClanChatName("");
 				}
 				return true;
-			}
+
+			default:
+				return false;
 		}
-		return false;
+	}
+
+	private static ClanChatRank getClanChatRank(int menuId) {
+		ClanChatRank rank = null;
+		if (menuId == 0) {
+			rank = ClanChatRank.OWNER;
+		} else if (menuId == 1) {
+			rank = ClanChatRank.GENERAL;
+		} else if (menuId == 2) {
+			rank = ClanChatRank.CAPTAIN;
+		} else if (menuId == 3) {
+			rank = ClanChatRank.LIEUTENANT;
+		} else if (menuId == 4) {
+			rank = ClanChatRank.SERGEANT;
+		} else if (menuId == 5) {
+			rank = ClanChatRank.CORPORAL;
+		} else if (menuId == 6) {
+			rank = ClanChatRank.RECRUIT;
+		} else if (menuId == 7) {
+			rank = ClanChatRank.FRIEND;
+		}
+		return rank;
 	}
 
 	public static void onLogin(Player player) {

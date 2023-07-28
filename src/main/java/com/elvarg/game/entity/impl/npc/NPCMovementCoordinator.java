@@ -52,7 +52,7 @@ public class NPCMovementCoordinator {
         updateCoordinator();
 
         switch (coordinateState) {
-            case HOME -> {
+            case HOME:
                 if (CombatFactory.inCombat(npc)) {
                     return;
                 }
@@ -64,8 +64,9 @@ public class NPCMovementCoordinator {
                         }
                     }
                 }
-            }
-            case RETREATING, AWAY -> RS317PathFinder.findPath(npc, npc.getSpawnPosition().getX(), npc.getSpawnPosition().getY(), true, 1, 1);
+            case RETREATING:
+            case AWAY:
+                RS317PathFinder.findPath(npc, npc.getSpawnPosition().getX(), npc.getSpawnPosition().getY(), true, 1, 1);
         }
     }
 

@@ -242,7 +242,10 @@ public class ButtonClickPacketListener implements PacketExecutor {
 			break;
 
 		case CANCEL_DESTROY_ITEM:
-			player.getPacketSender().sendInterfaceRemoval();
+
+            case CLOSE_BUTTON_1:
+            case CLOSE_BUTTON_2:
+                player.getPacketSender().sendInterfaceRemoval();
 			break;
 
 		case AUTOCAST_BUTTON_1:
@@ -259,11 +262,6 @@ public class ButtonClickPacketListener implements PacketExecutor {
 			} else {
 				player.getPacketSender().sendMessage("Your experience is now @red@unlocked.");
 			}
-			break;
-
-		case CLOSE_BUTTON_1:
-		case CLOSE_BUTTON_2:
-			player.getPacketSender().sendInterfaceRemoval();
 			break;
 
 		case FIRST_DIALOGUE_OPTION_OF_FIVE:

@@ -70,9 +70,12 @@ public class ChaosElementalCombatMethod extends CombatMethod {
         if (hit.getTarget() != null) {
 
             switch (combatType) {
-                case MELEE -> hit.getTarget().performGraphic(MELEE_COMBAT_GFX);
-                case RANGED -> hit.getTarget().performGraphic(RANGED_COMBAT_GFX);
-                case MAGIC -> hit.getTarget().performGraphic(MAGIC_COMBAT_GFX);
+                case MELEE:
+                    hit.getTarget().performGraphic(MELEE_COMBAT_GFX);
+                case RANGED:
+                    hit.getTarget().performGraphic(RANGED_COMBAT_GFX);
+                case MAGIC:
+                     hit.getTarget().performGraphic(MAGIC_COMBAT_GFX);
             }
 
             if (hit.getTarget().isPlayer()) {

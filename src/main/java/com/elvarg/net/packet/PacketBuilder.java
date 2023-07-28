@@ -1,7 +1,10 @@
 package com.elvarg.net.packet;
 
+import com.elvarg.Server;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+
+import java.util.logging.Logger;
 
 /**
  * The {@link Message} implementation that functions as a dynamic buffer wrapper
@@ -11,9 +14,12 @@ import io.netty.buffer.Unpooled;
  * @author blakeman8192
  */
 public final class PacketBuilder {
-    
+
+    private static final Logger logger = Logger.getLogger(Server.class.getSimpleName());
+
     /**
      * An array of the bit masks used for writing bits.
+     *
      */
     public static final int[] BIT_MASK = {0, 0x1, 0x3, 0x7, 0xf, 0x1f, 0x3f, 0x7f, 0xff, 0x1ff, 0x3ff, 0x7ff, 0xfff, 0x1fff, 0x3fff,
             0x7fff, 0xffff, 0x1ffff, 0x3ffff, 0x7ffff, 0xfffff, 0x1fffff, 0x3fffff, 0x7fffff, 0xffffff, 0x1ffffff, 0x3ffffff, 0x7ffffff,
@@ -181,8 +187,12 @@ public final class PacketBuilder {
      */
     public PacketBuilder initializeAccess(AccessType type) {
         switch (type) {
-            case BIT -> bitPosition = buffer.writerIndex() * 8;
-            case BYTE -> buffer.writerIndex((bitPosition + 7) / 8);
+            case BIT:
+                bitPosition = buffer.writerIndex() * 8;
+                break;
+            case BYTE:
+                buffer.writerIndex((bitPosition + 7) / 8);
+                break;
         }
         return this;
     }
@@ -245,20 +255,24 @@ public final class PacketBuilder {
      */
     public PacketBuilder putShort(int value, ValueType type, ByteOrder order) {
         switch (order) {
-            case BIG -> {
+            case BIG:
                 put(value >> 8);
                 put(value, type);
-            }
-            case MIDDLE -> throw new IllegalArgumentException("Middle-endian short is " + "impossible!");
-            case INVERSE_MIDDLE -> throw new IllegalArgumentException("Inverse-middle-endian " + "short is impossible!");
-            case LITTLE -> {
+                break; // Add break statement to exit the switch block after executing this case
+            case MIDDLE:
+                throw new IllegalArgumentException("Middle-endian short is impossible!");
+            case INVERSE_MIDDLE:
+                throw new IllegalArgumentException("Inverse-middle-endian short is impossible!");
+            case LITTLE:
                 put(value, type);
                 put(value >> 8);
-            }
-            case TRIPLE_INT -> throw new IllegalArgumentException("TRIPLE_INT " + "short not added!");
+                break; // Add break statement to exit the switch block after executing this case
+            case TRIPLE_INT:
+                throw new IllegalArgumentException("TRIPLE_INT short not added!");
         }
         return this;
     }
+
 
     /**
      * Writes a value as a normal big-endian {@code short}.
@@ -305,34 +319,39 @@ public final class PacketBuilder {
      */
     public PacketBuilder putInt(int value, ValueType type, ByteOrder order) {
         switch (order) {
-            case BIG -> {
+            case BIG:{
                 put(value >> 24);
                 put(value >> 16);
                 put(value >> 8);
                 put(value, type);
+                break;
             }
-            case MIDDLE -> {
+            case MIDDLE:{
                 put(value >> 8);
                 put(value, type);
                 put(value >> 24);
                 put(value >> 16);
+                break;
             }
-            case INVERSE_MIDDLE -> {
+            case INVERSE_MIDDLE:{
                 put(value >> 16);
                 put(value >> 24);
                 put(value, type);
                 put(value >> 8);
+                break;
             }
-            case LITTLE -> {
+            case LITTLE:{
                 put(value, type);
                 put(value >> 8);
                 put(value >> 16);
                 put(value >> 24);
+                break;
             }
-            case TRIPLE_INT -> {
+            case TRIPLE_INT:{
                 put((value >> 16));
                 put((value >> 8));
                 put(value);
+                break;
             }
         }
         return this;
@@ -384,7 +403,7 @@ public final class PacketBuilder {
      */
     public PacketBuilder putLong(long value, ValueType type, ByteOrder order) {
         switch (order) {
-            case BIG -> {
+            case BIG:
                 put((int) (value >> 56));
                 put((int) (value >> 48));
                 put((int) (value >> 40));
@@ -393,11 +412,14 @@ public final class PacketBuilder {
                 put((int) (value >> 16));
                 put((int) (value >> 8));
                 put((int) value, type);
-            }
-            case MIDDLE -> throw new UnsupportedOperationException("Middle-endian long " + "is not implemented!");
-            case INVERSE_MIDDLE -> throw new UnsupportedOperationException("Inverse-middle-endian long is not implemented!");
-            case TRIPLE_INT -> throw new UnsupportedOperationException("triple-int long is not implemented!");
-            case LITTLE -> {
+                break; // Add break statement to exit the switch block after executing this case
+            case MIDDLE:
+                throw new UnsupportedOperationException("Middle-endian long is not implemented!");
+            case INVERSE_MIDDLE:
+                throw new UnsupportedOperationException("Inverse-middle-endian long is not implemented!");
+            case TRIPLE_INT:
+                throw new UnsupportedOperationException("triple-int long is not implemented!");
+            case LITTLE:
                 put((int) value, type);
                 put((int) (value >> 8));
                 put((int) (value >> 16));
@@ -406,10 +428,11 @@ public final class PacketBuilder {
                 put((int) (value >> 40));
                 put((int) (value >> 48));
                 put((int) (value >> 56));
-            }
+                break; // Add break statement to exit the switch block after executing this case
         }
         return this;
     }
+
 
     /**
      * Writes a value as a standard big-endian {@code long}.
