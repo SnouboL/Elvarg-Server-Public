@@ -4,6 +4,7 @@ import com.elvarg.game.World;
 import com.elvarg.game.entity.impl.npc.NPC;
 import com.elvarg.game.entity.impl.player.Player;
 import com.elvarg.game.model.commands.Command;
+import com.elvarg.game.model.dialogues.DialogueManager;
 import com.elvarg.game.model.rights.PlayerRights;
 
 public class SpawnNPCCommand implements Command {

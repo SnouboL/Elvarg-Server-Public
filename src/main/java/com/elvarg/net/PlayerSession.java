@@ -30,7 +30,7 @@ import io.netty.channel.socket.SocketChannel;
  */
 public class PlayerSession {
 
-    private static final Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    private static final Logger logger = Logger.getLogger(PlayerSession.class.getName());
 
     /**
      * The queue of packets that will be handled on the next sequence.
@@ -138,10 +138,10 @@ public class PlayerSession {
             }
             try {
                 int opcode = packet.getOpcode();
-                log.info("Processing packet from player: " + player.getUsername() + ", Opcode: " + opcode);
+                logger.info("Processing packet from player: " + player.getUsername() + ", Opcode: " + opcode);
                 PacketConstants.PACKETS[packet.getOpcode()].execute(player, packet);
             } catch (Exception e) {
-                log.info("Error processing packet from player: " + player.getUsername() + " - " + e);
+                logger.info("Error processing packet from player: " + player.getUsername() + " - " + e);
             } finally {
                 packet.getBuffer().release();
             }
@@ -160,9 +160,9 @@ public class PlayerSession {
         try {
             Packet packet = builder.toPacket();
             channel.write(packet);
-            log.info("Packet sent to player: " + player.getUsername() + ", Opcode: " + packet.getOpcode());
+//            logger.info("Packet sent to player: " + player.getUsername() + ", Opcode: " + packet.getOpcode());
         } catch (Exception ex) {
-            log.info("Error while sending packet to player: " + player.getUsername() + " - " + ex);
+            logger.info("Error while sending packet to player: " + player.getUsername() + " - " + ex);
         }
     }
 

@@ -73,7 +73,7 @@ public class PickupItemPacketListener implements PacketExecutor {
 							int currentAmount = item.get().getItem().getAmount();
 							item.get().setOldAmount(currentAmount);
 							item.get().getItem().decrementAmountBy(playerCanHold);
-							ItemOnGroundManager.perform(item.get(), OperationType.ALTER);
+							ItemOnGroundManager.performOperationForAllPlayers(item.get(), OperationType.ALTER);
 							deregister = false;
 						}
 					}

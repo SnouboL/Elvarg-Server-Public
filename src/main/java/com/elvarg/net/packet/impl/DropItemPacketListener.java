@@ -1,6 +1,7 @@
 package com.elvarg.net.packet.impl;
 
 import com.elvarg.game.content.PetHandler;
+import com.elvarg.game.entity.impl.grounditem.ItemOnGround;
 import com.elvarg.game.entity.impl.grounditem.ItemOnGroundManager;
 import com.elvarg.game.entity.impl.player.Player;
 import com.elvarg.game.model.Item;
@@ -9,6 +10,8 @@ import com.elvarg.game.model.container.impl.Inventory;
 import com.elvarg.game.model.rights.PlayerRights;
 import com.elvarg.net.packet.Packet;
 import com.elvarg.net.packet.PacketExecutor;
+
+import java.util.logging.Logger;
 
 /**
  * This packet listener is called when a player drops an item they have placed
@@ -37,7 +40,7 @@ public class DropItemPacketListener implements PacketExecutor {
         int interface_id = packet.readUnsignedShort();
         int itemSlot = packet.readUnsignedShortA();
 
-        if (player == null || player.getHitpoints() <= 0) {
+        if (player.getHitpoints() <= 0) {
             return;
         }
 
@@ -45,9 +48,12 @@ public class DropItemPacketListener implements PacketExecutor {
             return;
         }
 
-        if (player.getHitpoints() <= 0)
+        if (player.getHitpoints() <= 0){
+            player.getPacketSender()
+                    .sendMessage("I can't drop stuff when im dead..");
             return;
-        
+        }
+
         if (itemSlot < 0 || itemSlot >= player.getInventory().capacity())
             return;
 
@@ -62,12 +68,7 @@ public class DropItemPacketListener implements PacketExecutor {
             return;
         }
 
-        if (player.getRights() == PlayerRights.DEVELOPER) {
-            player.getPacketSender().sendMessage("Drop item: " + item.getId() + ".");
-        }
-
         player.getPacketSender().sendInterfaceRemoval();
-
         // Stop skilling..
         player.getSkillManager().stopSkillable();
 
@@ -77,14 +78,14 @@ public class DropItemPacketListener implements PacketExecutor {
         }
 
         if (item.getDefinition().isDropable()) {
-        	
+
         	// Items dropped in the Wilderness should go global immediately.
             if (player.getArea() instanceof WildernessArea) {
             	ItemOnGroundManager.registerGlobal(player, item);
             } else {
             	ItemOnGroundManager.register(player, item);
             }
-            
+
             player.getInventory().setItem(itemSlot, new Item(-1, 0)).refreshItems();
         } else {
             destroyItemInterface(player, item);

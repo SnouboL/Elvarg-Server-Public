@@ -2,6 +2,8 @@ package com.elvarg.game.entity.impl.grounditem;
 
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.elvarg.game.World;
 import com.elvarg.game.entity.impl.grounditem.ItemOnGround.State;
@@ -17,6 +19,8 @@ import com.elvarg.game.task.impl.GroundItemRespawnTask;
  * @author Professor Oak
  */
 public class ItemOnGroundManager {
+	private static final Logger logger = Logger.getLogger(ItemOnGroundManager.class.getName());
+
 
 	/**
 	 * The delay between every {@link ItemOnGround} state update.
@@ -34,7 +38,7 @@ public class ItemOnGroundManager {
 		Iterator<ItemOnGround> iterator = World.getItems().iterator();
 		for (; iterator.hasNext();) {
 			ItemOnGround item = iterator.next();
-			perform(player, item, OperationType.CREATE);
+			performOperationForPlayer(player, item, OperationType.CREATE);
 		}
 	}
 
@@ -70,19 +74,19 @@ public class ItemOnGroundManager {
 	 * @param item
 	 * @param type
 	 */
-	public static void perform(ItemOnGround item, OperationType type) {
+	public static void performOperationForAllPlayers(ItemOnGround item, OperationType type) {
 		switch (item.getState()) {
 		case SEEN_BY_PLAYER:
 			if (item.getOwner().isPresent()) {
 				Optional<Player> owner = World.getPlayerByName(item.getOwner().get());
-				owner.ifPresent(o -> perform(o, item, type));
+				owner.ifPresent(o -> performOperationForPlayer(o, item, type));
 			}
 			break;
 		case SEEN_BY_EVERYONE:
 			for (Player player : World.getPlayers()) {
 				if (player == null)
 					continue;
-				perform(player, item, type);
+				performOperationForPlayer(player, item, type);
 			}
 			break;
 		default:
@@ -96,7 +100,7 @@ public class ItemOnGroundManager {
 	 * @param item
 	 * @param type
 	 */
-	public static void perform(Player player, ItemOnGround item, OperationType type) {
+	public static void performOperationForPlayer(Player player, ItemOnGround item, OperationType type) {
 		if (item.isPendingRemoval()) {
 			type = OperationType.DELETE;
 		}
@@ -124,7 +128,7 @@ public class ItemOnGroundManager {
 				player.getPacketSender().createGroundItem(item);
 				break;
 			default:
-				throw new UnsupportedOperationException("Unsupported operation (" + type + ") on: " + item);
+				logger.log(Level.WARNING, "Unsupported operation ({0}) on: {1}", new Object[]{type, item});
 		}
 	}
 
@@ -144,7 +148,7 @@ public class ItemOnGroundManager {
 		// We didn't need to modify a previous item.
 		// Simply register the given item to the world..
 		World.getItems().add(item);
-		ItemOnGroundManager.perform(item, OperationType.CREATE);
+		ItemOnGroundManager.performOperationForAllPlayers(item, OperationType.CREATE);
 	}
 
 	/**
@@ -156,41 +160,39 @@ public class ItemOnGroundManager {
 	 * @return
 	 */
 	public static boolean merge(ItemOnGround item) {
-		Iterator<ItemOnGround> iterator = World.getItems().iterator();
-		for (; iterator.hasNext();) {
-			ItemOnGround item_ = iterator.next();
-			if (item_ == null || item_.isPendingRemoval() || item_.equals(item)) {
-				continue;
-			}
-			if (!item_.getPosition().equals(item.getPosition())) {
-				continue;
-			}
+        for (ItemOnGround item_ : World.getItems()) {
+            if (item_ == null || item_.isPendingRemoval() || item_.equals(item)) {
+                continue;
+            }
+            if (!item_.getPosition().equals(item.getPosition())) {
+                continue;
+            }
 
-			// Check if the ground item is private...
-			// If we aren't the owner, we shouldn't modify it.
-			if (item_.getState() == State.SEEN_BY_PLAYER) {
-				boolean flag = true;
-				if (item_.getOwner().isPresent() && item.getOwner().isPresent()) {
-					if (item_.getOwner().get().equals(item.getOwner().get())) {
-						flag = false;
-					}
-				}
-				if (flag) {
-					continue;
-				}
-			}
+            // Check if the ground item is private...
+            // If we aren't the owner, we shouldn't modify it.
+            if (item_.getState() == State.SEEN_BY_PLAYER) {
+                boolean flag = true;
+                if (item_.getOwner().isPresent() && item.getOwner().isPresent()) {
+                    if (item_.getOwner().get().equals(item.getOwner().get())) {
+                        flag = false;
+                    }
+                }
+                if (flag) {
+                    continue;
+                }
+            }
 
-			// Modify the existing item.
-			if (item_.getItem().getId() == item.getItem().getId()) {
-				int oldAmount = item_.getItem().getAmount();
-				item_.getItem().incrementAmountBy(item.getItem().getAmount());
-				item_.setOldAmount(oldAmount);
-				item_.setTick(0);
-				ItemOnGroundManager.perform(item_, OperationType.ALTER);
-				return true;
-			}
-		}
-		return false;
+            // Modify the existing item.
+            if (item_.getItem().getId() == item.getItem().getId()) {
+                int oldAmount = item_.getItem().getAmount();
+                item_.getItem().incrementAmountBy(item.getItem().getAmount());
+                item_.setOldAmount(oldAmount);
+                item_.setTick(0);
+                ItemOnGroundManager.performOperationForAllPlayers(item_, OperationType.ALTER);
+                return true;
+            }
+        }
+        return false;
 	}
 
 	/**
@@ -202,7 +204,7 @@ public class ItemOnGroundManager {
 	 */
 	public static void deregister(ItemOnGround item) {
 		item.setPendingRemoval(true);
-		ItemOnGroundManager.perform(item, OperationType.DELETE);
+		ItemOnGroundManager.performOperationForAllPlayers(item, OperationType.DELETE);
 	}
 
 	/**
@@ -214,7 +216,7 @@ public class ItemOnGroundManager {
 	 * @return
 	 */
 	public static ItemOnGround register(Player player, Item item) {
-		return register(player, item, player.getLocation().clone());
+		return register(player, item, player.getLocation());
 	}
 
 	/**

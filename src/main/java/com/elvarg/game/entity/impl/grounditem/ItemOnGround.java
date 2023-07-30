@@ -107,7 +107,7 @@ public class ItemOnGround {
                         //We make the item despawn for the owner..
                         if (getOwner().isPresent()) {
                             Optional<Player> o = World.getPlayerByName(getOwner().get());
-                            o.ifPresent(player -> ItemOnGroundManager.perform(player, this, OperationType.DELETE));
+                            o.ifPresent(player -> ItemOnGroundManager.performOperationForPlayer(player, this, OperationType.DELETE));
                         }
 
                         //Check if we need to merge this ground item..
@@ -122,7 +122,7 @@ public class ItemOnGround {
 
                         //Spawn the item globally..
                         setState(State.SEEN_BY_EVERYONE);
-                        ItemOnGroundManager.perform(this, OperationType.CREATE);
+                        ItemOnGroundManager.performOperationForAllPlayers(this, OperationType.CREATE);
                         return;
                     }
 

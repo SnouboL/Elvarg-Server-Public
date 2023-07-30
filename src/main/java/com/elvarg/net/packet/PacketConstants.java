@@ -91,7 +91,6 @@ public class PacketConstants {
 		PACKETS[EXAMINE_NPC_OPCODE] = new ExamineNpcPacketListener();
 		PACKETS[CHANGE_APPEARANCE] = new ChangeAppearancePacketListener();
 		PACKETS[DIALOGUE_OPCODE] = new DialoguePacketListener();
-		PACKETS[ENTER_AMOUNT_OPCODE] = new EnterInputPacketListener();
 		PACKETS[EQUIP_ITEM_OPCODE] = new EquipPacketListener();
 		PACKETS[PLAYER_INACTIVE_OPCODE] = new PlayerInactivePacketListener();
 		PACKETS[CHAT_SETTINGS_OPCODE] = new ChatSettingsPacketListener();
